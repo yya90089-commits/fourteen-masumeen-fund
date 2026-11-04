@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101a35">
+<title>آزمایش نوبت‌بندی | صندوق خانوادگی چهارده معصوم</title>
+<style>
+:root{color-scheme:dark;--bg:#101a35;--panel:#1b2a49;--gold:#d8b568;--text:#f7f2e7;--muted:#b9c1d2}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Tahoma,sans-serif;line-height:1.9}
+main{max-width:760px;margin:auto;padding:24px 16px 50px}a{color:var(--gold)}h1,h2{color:#f3dfaa}
+.panel{background:var(--panel);border:1px solid #d8b56855;border-radius:15px;padding:18px;margin:16px 0}
+label{display:block;margin:8px 0;color:var(--muted)}input{width:100%;padding:12px;border:1px solid #d8b56888;border-radius:9px;background:#101a35;color:white;font:inherit}
+button{padding:11px 17px;border:0;border-radius:9px;background:var(--gold);color:#17213a;font:inherit;font-weight:bold;margin-top:12px;cursor:pointer}
+.note{color:var(--muted);font-size:13px}.result{display:grid;gap:8px;padding:0;list-style:none}.result li{background:#101a35;border:1px solid #d8b56855;padding:10px 13px;border-radius:9px}.n{color:var(--gold);font-weight:bold;margin-left:8px}
+</style>
+</head>
+<body><main>
+<a href="./">← بازگشت به صفحه اصلی</a>
+<h1>آزمایش نوبت‌بندی رفت‌وبرگشتی</h1>
+<p class="note">این ابزار فقط یک آزمایش نمایشی در همین مرورگر است. نام‌ها ذخیره یا ارسال نمی‌شوند و هیچ داده مالی یا واقعی وارد نکنید.</p>
+<section class="panel">
+<h2>اعضای نمونه</h2>
+<label for="names">نام‌های آزمایشی را وارد کنید (هر نام در یک خط):</label>
+<textarea id="names" rows="6" style="width:100%;padding:12px;border-radius:9px;background:#101a35;color:white;border:1px solid #d8b56888;font:inherit">عضو اول
+عضو دوم
+عضو سوم
+عضو چهارم</textarea>
+<label for="rounds">تعداد نوبت‌هایی که نمایش داده شود:</label>
+<input id="rounds" type="number" min="1" max="100" value="10">
+<button id="make">ساخت ترتیب نمونه</button>
+</section>
+<section class="panel" aria-live="polite">
+<h2>ترتیب نوبت‌ها</h2>
+<p class="note" id="explain">پس از واردکردن نام‌های آزمایشی، ترتیب رفت‌وبرگشتی نمایش داده می‌شود.</p>
+<ol class="result" id="result"></ol>
+</section>
+<p class="note">قاعده نمونه: از عضو اول تا آخر حرکت می‌کنیم، سپس از آخر به اول برمی‌گردیم؛ بنابراین عضو آخر و عضو اول در نقطه برگشت، هرکدام دو نوبت پیاپی دارند. این فقط نمایش الگوریتم است و هنوز به سامانه مالی متصل نیست.</p>
+</main>
+<script>
+function sequence(names,count){
+ if(names.length===0)return [];
+ if(names.length===1)return Array(count).fill(names[0]);
+ const path=[...names,...names.slice(0,-1).reverse()];
+ const out=[];
+ for(let i=0;i<count;i++)out.push(path[i%path.length]);
+ return out;
+}
+document.getElementById('make').addEventListener('click',()=>{
+ const names=document.getElementById('names').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+ const count=Number(document.getElementById('rounds').value);
+ const list=document.getElementById('result');list.replaceChildren();
+ if(!names.length){document.getElementById('explain').textContent='حداقل یک نام آزمایشی وارد کنید.';return;}
+ if(!Number.isInteger(count)||count<1||count>100){document.getElementById('explain').textContent='تعداد نوبت باید عددی بین ۱ تا ۱۰۰ باشد.';return;}
+ const items=sequence(names,count);
+ items.forEach((name,i)=>{const li=document.createElement('li');const n=document.createElement('span');n.className='n';n.textContent=(i+1)+'.';li.append(n,document.createTextNode(name));list.append(li);});
+ document.getElementById('explain').textContent='تعداد اعضا: '+names.length+' — تعداد نوبت‌های نمایش‌داده‌شده: '+items.length;
+});
+</script></body></html>
