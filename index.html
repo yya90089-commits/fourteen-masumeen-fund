@@ -31,6 +31,11 @@ h1{font-size:clamp(19px,4vw,27px);margin:0 0 5px;color:var(--gold2)}.sub{font-si
 .section-title{font-size:18px;color:var(--gold2);margin:30px 0 14px}.members{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.member{padding:14px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.025);font-size:13px}.member b{display:block;color:var(--gold2);margin-bottom:7px}.member span{font-size:11px;color:var(--muted)}
 .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.btn{border:1px solid var(--gold);background:transparent;color:var(--gold2);padding:11px 17px;border-radius:10px;font:inherit;font-size:13px}.btn.primary{background:var(--gold);color:#17213a;font-weight:bold}
 footer{text-align:center;color:#8994aa;font-size:11px;margin-top:38px;line-height:2}
+.dialog-backdrop{position:fixed;inset:0;z-index:10;background:rgba(3,8,20,.78);display:none;place-items:center;padding:18px}
+.dialog-backdrop.open{display:grid}
+.dialog{width:min(100%,460px);background:#182747;border:1px solid var(--gold);border-radius:18px;padding:22px;box-shadow:0 20px 70px #0008}
+.dialog h3{margin:0 0 12px;color:var(--gold2)}
+.dialog p{color:var(--muted);line-height:2;font-size:13px}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media(max-width:700px){.grid{grid-template-columns:1fr 1fr}.members{grid-template-columns:1fr 1fr}header{align-items:flex-start;flex-direction:column}.pill{align-self:flex-start}}
 @media(max-width:390px){.grid{grid-template-columns:1fr}.ray span{font-size:9px}}
@@ -92,10 +97,13 @@ footer{text-align:center;color:#8994aa;font-size:11px;margin-top:38px;line-heigh
   <div class="member"><b>امام عسکری (ع)</b><span>عسکری</span></div>
   <div class="member"><b>امام مهدی (عج)</b><span>قائم</span></div>
  </section>
- <div class="actions"><button class="btn primary" onclick="alert('ورود اعضا پس از راه‌اندازی سرور امن فعال می‌شود.')">ورود اعضا (به‌زودی)</button><button class="btn" onclick="alert('پنل مدیریت پس از راه‌اندازی سرور امن فعال می‌شود.')">پنل مدیر مالی (به‌زودی)</button></div>
+ <div class="actions"><button class="btn primary" onclick="showInfo('member')">ورود اعضا</button><button class="btn" onclick="showInfo('admin')">پنل مدیر مالی</button></div>
+ <div class="dialog-backdrop" id="infoDialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle" onclick="if(event.target===this)closeInfo()"><div class="dialog"><h3 id="dialogTitle">اطلاع‌رسانی</h3><p id="dialogText"></p><button class="btn primary" onclick="closeInfo()">متوجه شدم</button></div></div>
  <footer>این پیش‌نمایش برای نمایش طراحی است و برای نگهداری اطلاعات مالی واقعی ساخته نشده است.</footer>
 </main>
 <script>
+function showInfo(type){const title=document.getElementById('dialogTitle'),text=document.getElementById('dialogText');if(type==='member'){title.textContent='ورود اعضا';text.textContent='بخش ورود اعضا در مرحله بعد، پس از راه‌اندازی سرور امن و پایگاه داده فعال می‌شود. در حال حاضر هیچ نام کاربری یا رمزی وارد نکنید.';}else{title.textContent='پنل مدیر مالی';text.textContent='پنل مدیر مالی هنوز به سرور و دفتر مالی متصل نیست. پس از تکمیل کنترل دسترسی و ثبت امن رویدادها فعال خواهد شد. فعلاً اطلاعات مالی واقعی ثبت نکنید.';}document.getElementById('infoDialog').classList.add('open')}
+function closeInfo(){document.getElementById('infoDialog').classList.remove('open')}
 window.addEventListener('load',()=>{const s=document.getElementById('splash'),m=document.getElementById('main');setTimeout(()=>s.classList.add('zoom'),2000);setTimeout(()=>{s.classList.add('done');m.classList.add('ready')},3300)});
 </script>
 </body>
