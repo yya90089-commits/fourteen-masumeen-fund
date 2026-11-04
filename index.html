@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101a35">
+<title>صندوق خانوادگی چهارده معصوم</title>
+<style>
+:root{--navy:#101a35;--navy2:#182747;--gold:#d8b568;--gold2:#f3dfaa;--ink:#f7f2e7;--muted:#b9c1d2;--line:rgba(216,181,104,.23)}
+*{box-sizing:border-box}body{margin:0;background:var(--navy);color:var(--ink);font-family:Tahoma,"Segoe UI",sans-serif;min-height:100vh}
+.splash{position:fixed;inset:0;z-index:5;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at center,#25385d 0,#101a35 58%,#0a1124 100%);transition:opacity 1s ease,visibility 1s}
+.splash:before,.splash:after{content:"";position:absolute;width:min(90vw,650px);aspect-ratio:1;border:1px solid rgba(216,181,104,.24);border-radius:50%;box-shadow:0 0 45px rgba(216,181,104,.08),inset 0 0 45px rgba(216,181,104,.06)}
+.splash:after{width:min(75vw,530px);border-style:dashed;animation:spin 45s linear infinite}
+.emblem{position:relative;width:min(90vw,620px);aspect-ratio:1;display:grid;place-items:center;transform:scale(.82);transition:transform 1.3s cubic-bezier(.2,.8,.2,1)}
+.center{position:absolute;z-index:2;width:clamp(100px,24vw,170px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;text-align:center;padding:12px;background:linear-gradient(145deg,#f4dfa9,#b88b3f);color:#18213a;border:5px double #fff0c7;box-shadow:0 0 35px rgba(243,223,170,.4);font-size:clamp(21px,5vw,34px);font-weight:bold}
+.ray{position:absolute;left:50%;top:50%;width:0;height:0;transform:rotate(calc(var(--i)*27.6923deg))}
+.ray:before{content:"";position:absolute;width:2px;height:clamp(95px,22vw,165px);bottom:0;left:-1px;transform:translateY(-12px);background:linear-gradient(to top,rgba(243,223,170,.85),transparent);box-shadow:0 0 12px var(--gold)}
+.ray span{position:absolute;bottom:clamp(100px,23vw,174px);left:0;transform:translate(-50%,50%) rotate(calc(var(--i)*-27.6923deg));white-space:nowrap;color:var(--gold2);font-size:clamp(10px,2.5vw,15px);text-shadow:0 0 12px #e3c77f}
+.splash.zoom .emblem{transform:scale(1.5)}
+.splash.done{opacity:0;visibility:hidden;pointer-events:none}
+.intro{position:absolute;bottom:7%;color:var(--muted);font-size:13px;letter-spacing:1px}
+main{max-width:1100px;margin:auto;padding:28px 20px 60px;opacity:0;transform:translateY(14px);transition:opacity .8s,transform .8s}
+main.ready{opacity:1;transform:none}
+header{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 0 26px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:13px}.seal{width:48px;height:48px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--gold);font-size:24px}
+h1{font-size:clamp(19px,4vw,27px);margin:0 0 5px;color:var(--gold2)}.sub{font-size:12px;color:var(--muted)}
+.pill{border:1px solid var(--line);border-radius:30px;padding:9px 13px;color:var(--gold2);font-size:12px;white-space:nowrap}
+.hero{padding:32px 0 24px}.hero h2{font-size:23px;margin:0 0 10px}.hero p{color:var(--muted);line-height:2;margin:0;max-width:700px}
+.notice{margin:12px 0 25px;padding:13px 16px;border:1px solid rgba(216,181,104,.3);background:rgba(216,181,104,.08);border-radius:12px;color:#ead8aa;font-size:13px;line-height:1.9}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{background:linear-gradient(145deg,rgba(34,51,83,.92),rgba(23,36,63,.92));border:1px solid var(--line);border-radius:16px;padding:19px;min-height:130px}.card small{color:var(--muted)}.value{font-size:25px;color:var(--gold2);margin-top:13px}.card p{color:var(--muted);font-size:12px;line-height:1.8}
+.section-title{font-size:18px;color:var(--gold2);margin:30px 0 14px}.members{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.member{padding:14px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.025);font-size:13px}.member b{display:block;color:var(--gold2);margin-bottom:7px}.member span{font-size:11px;color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.btn{border:1px solid var(--gold);background:transparent;color:var(--gold2);padding:11px 17px;border-radius:10px;font:inherit;font-size:13px}.btn.primary{background:var(--gold);color:#17213a;font-weight:bold}
+footer{text-align:center;color:#8994aa;font-size:11px;margin-top:38px;line-height:2}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:700px){.grid{grid-template-columns:1fr 1fr}.members{grid-template-columns:1fr 1fr}header{align-items:flex-start;flex-direction:column}.pill{align-self:flex-start}}
+@media(max-width:390px){.grid{grid-template-columns:1fr}.ray span{font-size:9px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<section class="splash" id="splash" aria-label="نشان آغازین">
+ <div class="emblem">
+  <div class="center">محمد<br>(ص)</div>
+  <div class="ray" style="--i:0"><span>زهرا</span></div>
+  <div class="ray" style="--i:1"><span>مرتضی</span></div>
+  <div class="ray" style="--i:2"><span>مجتبی</span></div>
+  <div class="ray" style="--i:3"><span>سیدالشهدا</span></div>
+  <div class="ray" style="--i:4"><span>زین‌العابدین</span></div>
+  <div class="ray" style="--i:5"><span>باقر</span></div>
+  <div class="ray" style="--i:6"><span>صادق</span></div>
+  <div class="ray" style="--i:7"><span>کاظم</span></div>
+  <div class="ray" style="--i:8"><span>رضا</span></div>
+  <div class="ray" style="--i:9"><span>جواد</span></div>
+  <div class="ray" style="--i:10"><span>هادی</span></div>
+  <div class="ray" style="--i:11"><span>عسکری</span></div>
+  <div class="ray" style="--i:12"><span>قائم</span></div>
+ </div>
+ <div class="intro">صندوق خانوادگی چهارده معصوم</div>
+</section>
+<main id="main">
+ <header>
+  <div class="brand"><div class="seal">✧</div><div><h1>صندوق خانوادگی چهارده معصوم</h1><div class="sub">همدلی، امانت‌داری و همراهی خانواده</div></div></div>
+  <div class="pill">نسخهٔ نمایشی سایت</div>
+ </header>
+ <section class="hero"><h2>به صندوق خانوادگی خوش آمدید</h2><p>این صفحه پیش‌نمایش ظاهر و بخش‌های اصلی سامانه است. پس از راه‌اندازی بخش امن سرور، اعضا می‌توانند وضعیت دوره‌ها، نوبت‌ها و گردش صندوق را مشاهده کنند.</p></section>
+ <div class="notice">توجه: این نسخه هنوز به پایگاه داده و سرور متصل نیست. هیچ پرداخت، فیش و ورود واقعی در این صفحه ثبت یا تأیید نمی‌شود؛ لطفاً اطلاعات شخصی یا مالی وارد نکنید.</div>
+ <section class="grid">
+  <article class="card"><small>وضعیت دورهٔ جاری</small><div class="value">آماده‌سازی</div><p>اطلاعات دوره پس از اتصال سرور نمایش داده می‌شود.</p></article>
+  <article class="card"><small>نوبت بعدی دریافت</small><div class="value">—</div><p>ترتیب نوبت‌ها توسط مدیر صندوق تنظیم خواهد شد.</p></article>
+  <article class="card"><small>اعضای صندوق</small><div class="value">—</div><p>فهرست اعضا برای کاربران مجاز در دسترس خواهد بود.</p></article>
+ </section>
+ <h3 class="section-title">بخش‌های سامانه</h3>
+ <section class="grid">
+  <article class="card"><b>نوبت‌بندی دوره‌ای</b><p>نمایش ترتیب نوبت‌ها و زمان تقریبی دریافت هر عضو.</p></article>
+  <article class="card"><b>وضعیت واریزی‌ها</b><p>ثبت فیش و نمایش وضعیت بررسی پس از راه‌اندازی سرور امن.</p></article>
+  <article class="card"><b>دفتر گردش مالی</b><p>گزارش پرداخت‌ها و دریافت‌های تأییدشده.</p></article>
+ </section>
+ <h3 class="section-title">چهارده نام نورانی</h3>
+ <section class="members">
+  <div class="member"><b>حضرت محمد (ص)</b><span>مصطفی</span></div>
+  <div class="member"><b>حضرت فاطمه (س)</b><span>زهرا</span></div>
+  <div class="member"><b>امام علی (ع)</b><span>مرتضی</span></div>
+  <div class="member"><b>امام حسن (ع)</b><span>مجتبی</span></div>
+  <div class="member"><b>امام حسین (ع)</b><span>سیدالشهدا</span></div>
+  <div class="member"><b>امام سجاد (ع)</b><span>زین‌العابدین</span></div>
+  <div class="member"><b>امام باقر (ع)</b><span>باقر</span></div>
+  <div class="member"><b>امام صادق (ع)</b><span>صادق</span></div>
+  <div class="member"><b>امام کاظم (ع)</b><span>کاظم</span></div>
+  <div class="member"><b>امام رضا (ع)</b><span>رضا</span></div>
+  <div class="member"><b>امام جواد (ع)</b><span>جواد</span></div>
+  <div class="member"><b>امام هادی (ع)</b><span>هادی</span></div>
+  <div class="member"><b>امام عسکری (ع)</b><span>عسکری</span></div>
+  <div class="member"><b>امام مهدی (عج)</b><span>قائم</span></div>
+ </section>
+ <div class="actions"><button class="btn primary" onclick="alert('ورود اعضا پس از راه‌اندازی سرور امن فعال می‌شود.')">ورود اعضا (به‌زودی)</button><button class="btn" onclick="alert('پنل مدیریت پس از راه‌اندازی سرور امن فعال می‌شود.')">پنل مدیر مالی (به‌زودی)</button></div>
+ <footer>این پیش‌نمایش برای نمایش طراحی است و برای نگهداری اطلاعات مالی واقعی ساخته نشده است.</footer>
+</main>
+<script>
+window.addEventListener('load',()=>{const s=document.getElementById('splash'),m=document.getElementById('main');setTimeout(()=>s.classList.add('zoom'),2000);setTimeout(()=>{s.classList.add('done');m.classList.add('ready')},3300)});
+</script>
+</body>
+</html>
