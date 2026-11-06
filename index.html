@@ -40,6 +40,13 @@ footer{text-align:center;color:#8994aa;font-size:11px;margin-top:38px;line-heigh
 @media(max-width:700px){.grid{grid-template-columns:1fr 1fr}.members{grid-template-columns:1fr 1fr}header{align-items:flex-start;flex-direction:column}.pill{align-self:flex-start}}
 @media(max-width:390px){.grid{grid-template-columns:1fr}.ray span{font-size:9px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+
+.admin-panel{display:none;margin-top:24px;padding:20px;border:1px solid var(--gold);border-radius:16px;background:#182747}
+.admin-panel.open{display:block}.admin-panel input{width:100%;padding:11px;border-radius:9px;border:1px solid var(--line);background:#101a35;color:var(--ink);font:inherit;margin:7px 0 12px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.table-wrap{overflow:auto;margin-top:14px}
+table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.status{color:var(--gold2)}.mini{font-size:11px;color:var(--muted);line-height:1.9}
+@media(max-width:600px){.form-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -97,7 +104,31 @@ footer{text-align:center;color:#8994aa;font-size:11px;margin-top:38px;line-heigh
   <div class="member"><b>امام عسکری (ع)</b><span>عسکری</span></div>
   <div class="member"><b>امام مهدی (عج)</b><span>قائم</span></div>
  </section>
- <div class="actions"><a class="btn" href="./demo-nobat.html" style="text-decoration:none;display:inline-block">آزمایش نوبت‌بندی نمایشی</a><button class="btn primary" onclick="showInfo('member')">ورود اعضا</button><button class="btn" onclick="showInfo('admin')">پنل مدیر مالی</button></div>
+ <div class="actions"><button class="btn primary" onclick="toggleDemo()">مدیریت و آزمایش نوبت‌ها</button><button class="btn" onclick="showInfo('member')">ورود اعضا (در دست ساخت)</button><button class="btn" onclick="showInfo('admin')">پنل واقعی مدیر (در دست ساخت)</button></div>
+ <section class="admin-panel" id="demoPanel">
+  <h3 class="section-title" style="margin-top:0">مدیریت آزمایشی صندوق</h3>
+  <p class="mini">این بخش فقط روی همین مرورگر و با حافظه محلی کار می‌کند؛ اطلاعات آن به مدیر یا اعضای دیگر ارسال نمی‌شود و برای امور مالی واقعی مناسب نیست.</p>
+  <div class="form-row">
+   <label>نام عضو جدید<input id="newMember" maxlength="50" placeholder="مثلاً علی"></label>
+   <label>مبلغ ماهانه هر عضو (تومان)<input id="monthlyAmount" type="number" min="0" step="1000" placeholder="مبلغ اعلام‌شده مدیر"></label>
+  </div>
+  <div class="actions">
+   <button class="btn primary" onclick="addMember()">افزودن عضو</button>
+   <button class="btn" onclick="saveAmount()">ثبت مبلغ ماهانه</button>
+   <button class="btn" onclick="resetDemo()">پاک‌کردن اطلاعات آزمایشی</button>
+  </div>
+  <h4 class="section-title">فهرست اعضا</h4><div id="memberList" class="members"></div>
+  <h4 class="section-title">نوبت‌های دریافت</h4><p class="mini">الگو: رفت تا آخر، برگشت تا اول، سپس تکرار نفر اول؛ دو سر مسیر دو دریافت پیاپی دارند.</p>
+  <div class="table-wrap"><table><thead><tr><th>شماره دوره</th><th>دریافت‌کننده</th><th>مبلغ اعلامی هر عضو</th></tr></thead><tbody id="scheduleRows"></tbody></table></div>
+  <h4 class="section-title">درخواست جابه‌جایی نوبت</h4>
+  <div class="form-row"><label>عضو اول<input id="swapA" placeholder="نام عضو"></label><label>عضو دوم<input id="swapB" placeholder="نام عضو"></label></div>
+  <label class="mini"><input id="consentA" type="checkbox" style="width:auto"> رضایت عضو اول</label>
+  <label class="mini"><input id="consentB" type="checkbox" style="width:auto"> رضایت عضو دوم</label>
+  <label class="mini"><input id="managerOK" type="checkbox" style="width:auto"> تأیید مدیر مالی</label>
+  <div class="actions"><button class="btn primary" onclick="swapTurns()">ثبت جابه‌جایی آزمایشی</button></div>
+  <p id="demoMessage" class="mini" role="status"></p>
+ </section>
+
  <div class="dialog-backdrop" id="infoDialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle" onclick="if(event.target===this)closeInfo()"><div class="dialog"><h3 id="dialogTitle">اطلاع‌رسانی</h3><p id="dialogText"></p><button class="btn primary" onclick="closeInfo()">متوجه شدم</button></div></div>
  <footer>این پیش‌نمایش برای نمایش طراحی است و برای نگهداری اطلاعات مالی واقعی ساخته نشده است.</footer>
 </main>
@@ -105,6 +136,18 @@ footer{text-align:center;color:#8994aa;font-size:11px;margin-top:38px;line-heigh
 function showInfo(type){const title=document.getElementById('dialogTitle'),text=document.getElementById('dialogText');if(type==='member'){title.textContent='ورود اعضا';text.textContent='بخش ورود اعضا در مرحله بعد، پس از راه‌اندازی سرور امن و پایگاه داده فعال می‌شود. در حال حاضر هیچ نام کاربری یا رمزی وارد نکنید.';}else{title.textContent='پنل مدیر مالی';text.textContent='پنل مدیر مالی هنوز به سرور و دفتر مالی متصل نیست. پس از تکمیل کنترل دسترسی و ثبت امن رویدادها فعال خواهد شد. فعلاً اطلاعات مالی واقعی ثبت نکنید.';}document.getElementById('infoDialog').classList.add('open')}
 function closeInfo(){document.getElementById('infoDialog').classList.remove('open')}
 window.addEventListener('load',()=>{const s=document.getElementById('splash'),m=document.getElementById('main');setTimeout(()=>s.classList.add('zoom'),2000);setTimeout(()=>{s.classList.add('done');m.classList.add('ready')},3300)});
+
+const DEMO_KEY='fourteenFundDemoV1';
+function getDemo(){try{return JSON.parse(localStorage.getItem(DEMO_KEY))||{members:[],amount:0,overrides:{}}}catch(e){return {members:[],amount:0,overrides:{}}}}
+function putDemo(d){localStorage.setItem(DEMO_KEY,JSON.stringify(d));renderDemo()}
+function toggleDemo(){document.getElementById('demoPanel').classList.toggle('open');renderDemo()}
+function msg(t){document.getElementById('demoMessage').textContent=t}
+function addMember(){const el=document.getElementById('newMember'),name=el.value.trim(),d=getDemo();if(!name)return msg('نام عضو را وارد کنید.');if(d.members.includes(name))return msg('این نام قبلاً ثبت شده است.');d.members.push(name);el.value='';putDemo(d);msg('عضو به فهرست آزمایشی اضافه شد.')}
+function saveAmount(){const v=Number(document.getElementById('monthlyAmount').value);if(!Number.isFinite(v)||v<0)return msg('مبلغ معتبر وارد کنید.');const d=getDemo();d.amount=v;putDemo(d);msg('مبلغ آزمایشی ذخیره شد.')}
+function makeSchedule(m){if(!m.length)return [];if(m.length===1)return [m[0],m[0]];return [...m,...m.slice(0,-1).reverse(),m[0]]}
+function renderDemo(){const d=getDemo(),list=document.getElementById('memberList'),rows=document.getElementById('scheduleRows');if(!list||!rows)return;list.innerHTML='';d.members.forEach((n,i)=>{const el=document.createElement('div');el.className='member';const b=document.createElement('b');b.textContent=(i+1)+'. '+n;const s=document.createElement('span');s.textContent='عضو صندوق';el.append(b,s);list.append(el)});rows.innerHTML='';makeSchedule(d.members).forEach((n,i)=>{const tr=document.createElement('tr');[String(i+1),n,(d.amount||0).toLocaleString('fa-IR')+' تومان'].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.append(td)});rows.append(tr)});document.getElementById('monthlyAmount').value=d.amount||''}
+function swapTurns(){const a=document.getElementById('swapA').value.trim(),b=document.getElementById('swapB').value.trim(),d=getDemo();if(!a||!b||a===b)return msg('دو نام متفاوت وارد کنید.');if(![a,b].every(n=>d.members.includes(n)))return msg('هر دو نام باید در فهرست اعضا باشند.');if(!document.getElementById('consentA').checked||!document.getElementById('consentB').checked||!document.getElementById('managerOK').checked)return msg('برای ثبت، رضایت هر دو عضو و تأیید مدیر لازم است.');const i=d.members.indexOf(a),j=d.members.indexOf(b);[d.members[i],d.members[j]]=[d.members[j],d.members[i]];putDemo(d);msg('ترتیب فهرست در نسخه آزمایشی جابه‌جا شد. این اقدام تأیید واقعی یا ثبت رسمی نیست.')}
+function resetDemo(){if(!confirm('همه اطلاعات آزمایشی این مرورگر پاک شود؟'))return;localStorage.removeItem(DEMO_KEY);renderDemo();msg('اطلاعات آزمایشی پاک شد.')}
 </script>
 </body>
 </html>
